@@ -1,0 +1,86 @@
+# Budget Tracker - Setup Instructions
+
+## Quick Setup (2 minutes)
+
+### Step 1: Create Project Folder
+```bash
+mkdir budget-tracker
+cd budget-tracker
+```
+
+### Step 2: Create the Files
+
+Create this exact folder structure:
+
+```
+budget-tracker/
+├── src/
+│   ├── components/
+│   │   ├── TransactionForm.jsx
+│   │   ├── TransactionList.jsx
+│   │   └── Summary.jsx
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+├── package.json
+├── index.html
+├── vite.config.js
+├── tailwind.config.js
+├── postcss.config.js
+├── .gitignore
+└── README.md
+```
+
+### Step 3: Copy File Contents
+
+Download all the files I've shared and place them in the correct folders.
+
+Or copy from the text files:
+1. Open each .txt file I shared
+2. Copy the content
+3. Create a new file with the correct name
+4. Paste the content
+
+### Step 4: Install & Run
+
+```bash
+npm install
+npm run dev
+```
+
+Open http://localhost:5173
+
+### Step 5: Push to GitHub
+
+```bash
+git init
+git add .
+git commit -m "Initial commit: Budget tracker"
+git remote add origin YOUR-GITHUB-URL
+git push -u origin main
+```
+
+## File Descriptions
+
+**package.json** - Project dependencies
+**index.html** - Main HTML file
+**vite.config.js** - Vite configuration
+**tailwind.config.js** - Tailwind CSS config
+**postcss.config.js** - PostCSS config
+**.gitignore** - Git ignore rules
+
+**src/main.jsx** - Entry point
+**src/App.jsx** - Main app component
+**src/index.css** - Tailwind imports
+
+**src/components/TransactionForm.jsx** - Form to add transactions
+**src/components/TransactionList.jsx** - List of all transactions
+**src/components/Summary.jsx** - Balance summary cards
+
+## Need Help?
+
+If you get stuck:
+1. Make sure Node.js is installed (`node --version`)
+2. Delete node_modules and run `npm install` again
+3. Check all files are in the right folders
+4. Make sure file names match exactly (case-sensitive!)
