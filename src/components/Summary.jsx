@@ -11,25 +11,40 @@ function Summary({ transactions }) {
 
   return (
     <>
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-sm font-medium text-gray-500 mb-2">Income</h3>
-        <p className="text-2xl font-bold text-green-600">
+      <div className="stat-card group">
+        <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Income</h3>
+        <p className="text-3xl font-bold text-green-400 glow-green">
           ${income.toFixed(2)}
         </p>
+        <div className="absolute top-2 right-2 text-green-400 opacity-20 group-hover:opacity-40 transition-opacity text-4xl">
+          ↑
+        </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-sm font-medium text-gray-500 mb-2">Expenses</h3>
-        <p className="text-2xl font-bold text-red-600">
+      <div className="stat-card group">
+        <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Expenses</h3>
+        <p className="text-3xl font-bold text-red-400 glow-red">
           ${expenses.toFixed(2)}
         </p>
+        <div className="absolute top-2 right-2 text-red-400 opacity-20 group-hover:opacity-40 transition-opacity text-4xl">
+          ↓
+        </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-sm font-medium text-gray-500 mb-2">Balance</h3>
-        <p className={`text-2xl font-bold ${balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+      <div className="stat-card group">
+        <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Balance</h3>
+        <p className={`text-3xl font-bold ${
+          balance >= 0 
+            ? 'text-cyan-400 glow-cyan' 
+            : 'text-red-400 glow-red'
+        }`}>
           ${balance.toFixed(2)}
         </p>
+        <div className={`absolute top-2 right-2 opacity-20 group-hover:opacity-40 transition-opacity text-4xl ${
+          balance >= 0 ? 'text-cyan-400' : 'text-red-400'
+        }`}>
+          {balance >= 0 ? '💰' : '⚠️'}
+        </div>
       </div>
     </>
   );

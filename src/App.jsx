@@ -51,7 +51,7 @@ function App() {
       const todayStr = today.toISOString().split('T')[0];
       const lastCheck = localStorage.getItem('lastRecurringCheck');
 
-      if (lastCheck === todayStr) return; // Already processed today
+      if (lastCheck === todayStr) return;
 
       recurring.forEach(r => {
         if (shouldProcessRecurring(r, today)) {
@@ -68,7 +68,7 @@ function App() {
     };
 
     processRecurring();
-    const interval = setInterval(processRecurring, 3600000); // Check every hour
+    const interval = setInterval(processRecurring, 3600000);
     return () => clearInterval(interval);
   }, [recurring]);
 
@@ -78,7 +78,6 @@ function App() {
     if (r.frequency === 'monthly') {
       return dayOfMonth === r.dayOfMonth;
     }
-    // Add daily/weekly logic here if needed
     return false;
   };
 
@@ -120,7 +119,6 @@ function App() {
     setBudgetLimits(newLimits);
   };
 
-  // Filter transactions by date
   const getFilteredTransactions = () => {
     const now = new Date();
     const currentMonth = now.getMonth();
@@ -141,56 +139,80 @@ function App() {
                transactionDate.getFullYear() === lastMonthYear;
       }
       
-      return true; // 'all'
+      return true;
     });
   };
 
   const filteredTransactions = getFilteredTransactions();
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800">Budget Tracker</h1>
-          <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-semibold">
-            Premium Features 🎯
-          </span>
+    <div className="min-h-screen bg-gray-900 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header with gradient */}
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
+          <div>
+            <h1 className="text-5xl font-bold gradient-text mb-2 animate-fadeIn">
+              💰 Budget Tracker
+            </h1>
+            <p className="text-gray-400 text-sm">Track smarter, spend better</p>
+          </div>
+          <div className="badge-premium animate-fadeIn">
+            ✨ Premium Features
+          </div>
         </div>
         
         <DateFilter currentFilter={dateFilter} onFilterChange={setDateFilter} />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-fadeIn">
           <Summary transactions={filteredTransactions} />
         </div>
 
+        {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <TransactionForm onAddTransaction={addTransaction} />
-          <CategoryChart transactions={filteredTransactions} />
+          <div className="animate-fadeIn">
+            <TransactionForm onAddTransaction={addTransaction} />
+          </div>
+          <div className="animate-fadeIn">
+            <CategoryChart transactions={filteredTransactions} />
+          </div>
         </div>
 
-        {/* NEW: Premium Features */}
+        {/* Premium Features Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <RecurringManager 
-            recurring={recurring}
-            onAdd={addRecurring}
-            onDelete={deleteRecurring}
-          />
-          <BudgetLimits 
-            transactions={filteredTransactions}
-            limits={budgetLimits}
-            onSetLimit={setLimit}
-            onRemoveLimit={removeLimit}
-          />
+          <div className="animate-fadeIn">
+            <RecurringManager 
+              recurring={recurring}
+              onAdd={addRecurring}
+              onDelete={deleteRecurring}
+            />
+          </div>
+          <div className="animate-fadeIn">
+            <BudgetLimits 
+              transactions={filteredTransactions}
+              limits={budgetLimits}
+              onSetLimit={setLimit}
+              onRemoveLimit={removeLimit}
+            />
+          </div>
         </div>
 
+        {/* Transactions and Export */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 animate-fadeIn">
             <TransactionList 
               transactions={filteredTransactions} 
               onDeleteTransaction={deleteTransaction} 
             />
           </div>
-          <DataExport transactions={transactions} />
+          <div className="animate-fadeIn">
+            <DataExport transactions={transactions} />
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center text-gray-500 text-sm mt-12">
+          <p>Built with ❤️ • Dark Mode Premium Edition</p>
         </div>
       </div>
     </div>
