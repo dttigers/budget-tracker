@@ -95,10 +95,10 @@ function App() {
     setTransactions(transactions.filter(t => t.id !== id));
   };
 
-  const addRecurring = (recurring) => {
+  const addRecurring = (recurringItem) => {
     const newRecurring = {
       id: Date.now(),
-      ...recurring
+      ...recurringItem
     };
     setRecurring([...recurring, newRecurring]);
   };
