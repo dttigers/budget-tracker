@@ -1,27 +1,67 @@
-function DateFilter({ currentFilter, onFilterChange }) {
-  const filters = [
-    { value: 'all', label: 'All Time' },
-    { value: 'thisMonth', label: 'This Month' },
-    { value: 'lastMonth', label: 'Last Month' }
-  ];
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+function CategoryChart({ transactions }) {
+  const expenses = transactions.filter(t => t.type === 'expense');
+  
+  // Group by category
+  const categoryTotals = expenses.reduce((acc, t) => {
+    acc[t.category] = (acc[t.category] || 0) + t.amount;
+    return acc;
+  }, {});
+
+  const data = {
+    labels: Object.keys(categoryTotals),
+    datasets: [
+      {
+        label: 'Spending by Category',
+        data: Object.values(categoryTotals),
+        backgroundColor: [
+          '#FF6384',
+          '#36A2EB',
+          '#FFCE56',
+          '#4BC0C0',
+          '#9966FF',
+          '#FF9F40',
+          '#C9CBCF'
+        ],
+        borderWidth: 2,
+        borderColor: '#fff'
+      }
+    ]
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            return `${context.label}: $${context.parsed.toFixed(2)}`;
+          }
+        }
+      }
+    }
+  };
 
   return (
-    <div className="mb-6 flex gap-2">
-      {filters.map(filter => (
-        <button
-          key={filter.value}
-          onClick={() => onFilterChange(filter.value)}
-          className={`px-4 py-2 rounded-md font-medium transition-colors ${
-            currentFilter === filter.value
-              ? 'bg-blue-500 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-100'
-          }`}
-        >
-          {filter.label}
-        </button>
-      ))}
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-2xl font-semibold mb-4">Spending by Category</h2>
+      {expenses.length === 0 ? (
+        <p className="text-gray-500 text-center py-8">No expenses to display</p>
+      ) : (
+        <div className="max-w-md mx-auto">
+          <Doughnut data={data} options={options} />
+        </div>
+      )}
     </div>
   );
 }
 
-export default DateFilter;
+export default CategoryChart;
