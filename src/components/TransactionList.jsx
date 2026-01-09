@@ -1,9 +1,26 @@
-function TransactionList({ transactions, onDeleteTransaction }) {
+function TransactionList({ transactions, onDeleteTransaction, typeFilter = 'all', onClearFilter }) {
+  const filteredTransactions = typeFilter === 'all' 
+    ? transactions 
+    : transactions.filter(t => t.type === typeFilter);
+
   return (
     <div className="premium-card p-6">
-      <h2 className="section-header mb-6">Transaction History</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="section-header">
+          {typeFilter === 'all' ? 'Transaction History' : 
+           typeFilter === 'income' ? '💰 Income' : '💸 Expenses'}
+        </h2>
+        {typeFilter !== 'all' && (
+          <button
+            onClick={onClearFilter}
+            className="text-sm text-gray-400 hover:text-cyan-400 transition-colors"
+          >
+            Show All ×
+          </button>
+        )}
+      </div>
       
-      {transactions.length === 0 ? (
+      {filteredTransactions.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-6xl mb-4 opacity-20">📊</div>
           <p className="text-gray-400">No transactions yet</p>
@@ -11,7 +28,7 @@ function TransactionList({ transactions, onDeleteTransaction }) {
         </div>
       ) : (
         <div className="space-y-3 max-h-[500px] overflow-y-auto custom-scrollbar pr-2">
-          {transactions.map(transaction => (
+          {filteredTransactions.map(transaction => (
             <div
               key={transaction.id}
               className="transaction-item group"
@@ -61,10 +78,11 @@ function TransactionList({ transactions, onDeleteTransaction }) {
         </div>
       )}
 
-      {transactions.length > 0 && (
+      {filteredTransactions.length > 0 && (
         <div className="mt-4 pt-4 border-t border-gray-700">
           <p className="text-sm text-gray-400 text-center">
-            {transactions.length} transaction{transactions.length !== 1 ? 's' : ''} total
+            {filteredTransactions.length} transaction{filteredTransactions.length !== 1 ? 's' : ''}
+            {typeFilter !== 'all' ? ` (${typeFilter})` : ' total'}
           </p>
         </div>
       )}

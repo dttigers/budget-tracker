@@ -19,9 +19,9 @@ function CategoryChart({ transactions }) {
       {
         label: 'Amount',
         data: [totalIncome, totalExpenses],
-        backgroundColor: ['#4CAF50', '#FF6384'],
+        backgroundColor: ['#4ade80', '#f87171'],
         borderWidth: 2,
-        borderColor: '#fff'
+        borderColor: '#1f2937'
       }
     ]
   };
@@ -32,6 +32,9 @@ function CategoryChart({ transactions }) {
     plugins: {
       legend: {
         position: 'bottom',
+        labels: {
+          color: '#9ca3af'
+        }
       },
       tooltip: {
         callbacks: {
@@ -46,25 +49,28 @@ function CategoryChart({ transactions }) {
   const hasData = totalIncome > 0 || totalExpenses > 0;
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-4">Income vs Expenses</h2>
+    <div className="premium-card p-6">
+      <h2 className="section-header mb-4">Income vs Expenses</h2>
       {!hasData ? (
-        <p className="text-gray-500 text-center py-8">No transactions to display</p>
+        <div className="text-center py-12">
+          <div className="text-6xl mb-4 opacity-20">📊</div>
+          <p className="text-gray-400">No transactions to display</p>
+        </div>
       ) : (
         <div className="max-w-md mx-auto">
           <Doughnut data={data} options={options} />
           <div className="mt-4 flex justify-center gap-8 text-sm">
             <div className="text-center">
-              <p className="text-gray-500">Income</p>
-              <p className="text-lg font-semibold text-green-600">${totalIncome.toFixed(2)}</p>
+              <p className="text-gray-400">Income</p>
+              <p className="text-lg font-semibold text-green-400">${totalIncome.toFixed(2)}</p>
             </div>
             <div className="text-center">
-              <p className="text-gray-500">Expenses</p>
-              <p className="text-lg font-semibold text-red-600">${totalExpenses.toFixed(2)}</p>
+              <p className="text-gray-400">Expenses</p>
+              <p className="text-lg font-semibold text-red-400">${totalExpenses.toFixed(2)}</p>
             </div>
             <div className="text-center">
-              <p className="text-gray-500">Balance</p>
-              <p className={`text-lg font-semibold ${totalIncome - totalExpenses >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <p className="text-gray-400">Balance</p>
+              <p className={`text-lg font-semibold ${totalIncome - totalExpenses >= 0 ? 'text-cyan-400' : 'text-red-400'}`}>
                 ${(totalIncome - totalExpenses).toFixed(2)}
               </p>
             </div>

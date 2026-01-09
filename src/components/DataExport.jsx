@@ -46,17 +46,17 @@ function DataExport({ transactions }) {
     .reduce((sum, t) => sum + t.amount, 0);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-4">Export Data</h2>
+    <div className="premium-card p-6">
+      <h2 className="section-header mb-4">Export Data</h2>
       
-      <div className="mb-4 p-4 bg-blue-50 rounded-md">
-        <p className="text-sm text-gray-700 mb-2">
-          <strong>Ready to export:</strong> {transactions.length} transactions
+      <div className="mb-4 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+        <p className="text-sm text-gray-300 mb-2">
+          <strong className="text-gray-100">Ready to export:</strong> {transactions.length} transactions
         </p>
-        <p className="text-sm text-gray-600">
-          Total Income: <span className="text-green-600 font-semibold">${income.toFixed(2)}</span>
+        <p className="text-sm text-gray-400">
+          Total Income: <span className="text-green-400 font-semibold">${income.toFixed(2)}</span>
           {' | '}
-          Total Expenses: <span className="text-red-600 font-semibold">${expenses.toFixed(2)}</span>
+          Total Expenses: <span className="text-red-400 font-semibold">${expenses.toFixed(2)}</span>
         </p>
       </div>
 
@@ -65,7 +65,7 @@ function DataExport({ transactions }) {
         disabled={transactions.length === 0}
         className={`w-full py-3 px-4 rounded-md font-medium transition-colors ${
           transactions.length === 0
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
             : 'bg-green-500 text-white hover:bg-green-600'
         }`}
       >

@@ -25,7 +25,7 @@ function TransactionForm({ onAddTransaction }) {
       description,
       amount: parseFloat(amount),
       type,
-      category
+      category: type === 'income' ? 'Income' : category
     });
 
     setDescription('');
@@ -59,6 +59,7 @@ function TransactionForm({ onAddTransaction }) {
           <input
             type="number"
             step="0.01"
+            inputMode="decimal"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             className="input-field"
@@ -82,17 +83,22 @@ function TransactionForm({ onAddTransaction }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${type === 'income' ? 'text-gray-500' : 'text-gray-300'}`}>
               Category
             </label>
             <select
-              value={category}
+              value={type === 'income' ? 'Income' : category}
               onChange={(e) => setCategory(e.target.value)}
-              className="select-field"
+              disabled={type === 'income'}
+              className={`select-field ${type === 'income' ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              {CATEGORIES.map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
+              {type === 'income' ? (
+                <option value="Income">Income</option>
+              ) : (
+                CATEGORIES.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))
+              )}
             </select>
           </div>
         </div>

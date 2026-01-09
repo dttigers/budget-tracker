@@ -28,6 +28,7 @@ function App() {
   });
 
   const [dateFilter, setDateFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all'); // 'all', 'income', 'expense'
 
   // Save transactions to localStorage
   useEffect(() => {
@@ -165,7 +166,11 @@ function App() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-fadeIn">
-          <Summary transactions={filteredTransactions} />
+          <Summary 
+            transactions={filteredTransactions} 
+            typeFilter={typeFilter}
+            onTypeFilterChange={setTypeFilter}
+          />
         </div>
 
         {/* Main Grid */}
@@ -202,7 +207,9 @@ function App() {
           <div className="lg:col-span-2 animate-fadeIn">
             <TransactionList 
               transactions={filteredTransactions} 
-              onDeleteTransaction={deleteTransaction} 
+              onDeleteTransaction={deleteTransaction}
+              typeFilter={typeFilter}
+              onClearFilter={() => setTypeFilter('all')}
             />
           </div>
           <div className="animate-fadeIn">
