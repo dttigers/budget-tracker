@@ -442,8 +442,8 @@
             <p style="margin-top: 0.5rem;">Your data stays on your device. Always.</p>
         </div>
     </footer>
- <div id="modalOverlay" class="modal-overlay" onclick="closeModalOnOverlay(event)">
-        <div class="modal">
+  <div id="modalOverlay" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeModal()">&times;</button>
             <h3>Join the Waitlist</h3>
             <p>Be the first to know when Premium launches. We'll send you an exclusive early-bird discount!</p>
@@ -474,6 +474,7 @@
             document.getElementById('modalOverlay').classList.remove('active');
             document.getElementById('successMessage').classList.remove('active');
             document.getElementById('waitlistForm').style.display = 'flex';
+            document.getElementById('emailInput').value = '';
         }
 
         function closeModalOnOverlay(event) {
