@@ -9,43 +9,36 @@ import BudgetLimits from './components/BudgetLimits';
 import DataExport from './components/DataExport';
 
 function App() {
-  // Load transactions from localStorage
   const [transactions, setTransactions] = useState(() => {
     const saved = localStorage.getItem('transactions');
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Load recurring transactions
   const [recurring, setRecurring] = useState(() => {
     const saved = localStorage.getItem('recurring');
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Load budget limits
   const [budgetLimits, setBudgetLimits] = useState(() => {
     const saved = localStorage.getItem('budgetLimits');
     return saved ? JSON.parse(saved) : {};
   });
 
   const [dateFilter, setDateFilter] = useState('all');
-  const [typeFilter, setTypeFilter] = useState('all'); // 'all', 'income', 'expense'
+  const [typeFilter, setTypeFilter] = useState('all'); // NEW: Filter by type
 
-  // Save transactions to localStorage
   useEffect(() => {
     localStorage.setItem('transactions', JSON.stringify(transactions));
   }, [transactions]);
 
-  // Save recurring transactions to localStorage
   useEffect(() => {
     localStorage.setItem('recurring', JSON.stringify(recurring));
   }, [recurring]);
 
-  // Save budget limits to localStorage
   useEffect(() => {
     localStorage.setItem('budgetLimits', JSON.stringify(budgetLimits));
   }, [budgetLimits]);
 
-  // Process recurring transactions daily
   useEffect(() => {
     const processRecurring = () => {
       const today = new Date();
@@ -75,7 +68,6 @@ function App() {
 
   const shouldProcessRecurring = (r, today) => {
     const dayOfMonth = today.getDate();
-    
     if (r.frequency === 'monthly') {
       return dayOfMonth === r.dayOfMonth;
     }
@@ -128,28 +120,42 @@ function App() {
     return transactions.filter(t => {
       const transactionDate = new Date(t.date);
       
+      // Date filter
+      let passesDateFilter = true;
       if (dateFilter === 'thisMonth') {
-        return transactionDate.getMonth() === currentMonth && 
+        passesDateFilter = transactionDate.getMonth() === currentMonth && 
                transactionDate.getFullYear() === currentYear;
-      }
-      
-      if (dateFilter === 'lastMonth') {
+      } else if (dateFilter === 'lastMonth') {
         const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
         const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-        return transactionDate.getMonth() === lastMonth && 
+        passesDateFilter = transactionDate.getMonth() === lastMonth && 
                transactionDate.getFullYear() === lastMonthYear;
       }
+
+      // Type filter
+      let passesTypeFilter = true;
+      if (typeFilter !== 'all') {
+        passesTypeFilter = t.type === typeFilter;
+      }
       
-      return true;
+      return passesDateFilter && passesTypeFilter;
     });
   };
 
   const filteredTransactions = getFilteredTransactions();
 
+  // Handle stat card clicks
+  const handleStatClick = (type) => {
+    if (typeFilter === type) {
+      setTypeFilter('all');
+    } else {
+      setTypeFilter(type);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 py-8 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header with gradient */}
         <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
           <div>
             <h1 className="text-5xl font-bold gradient-text mb-2 animate-fadeIn">
@@ -164,16 +170,32 @@ function App() {
         
         <DateFilter currentFilter={dateFilter} onFilterChange={setDateFilter} />
 
-        {/* Summary Cards */}
+        {/* Clickable Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-fadeIn">
           <Summary 
             transactions={filteredTransactions} 
-            typeFilter={typeFilter}
-            onTypeFilterChange={setTypeFilter}
+            onStatClick={handleStatClick}
+            activeFilter={typeFilter}
           />
         </div>
 
-        {/* Main Grid */}
+        {/* Active filter indicator */}
+        {typeFilter !== 'all' && (
+          <div className="mb-6 animate-fadeIn">
+            <div className="flex items-center justify-between bg-cyan-500/10 border border-cyan-500/30 rounded-lg px-4 py-3">
+              <span className="text-cyan-400 text-sm font-medium">
+                Showing {typeFilter === 'income' ? '💰 Income' : '💸 Expense'} transactions only
+              </span>
+              <button
+                onClick={() => setTypeFilter('all')}
+                className="text-cyan-400 hover:text-cyan-300 text-sm font-medium"
+              >
+                Show All ✕
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div className="animate-fadeIn">
             <TransactionForm onAddTransaction={addTransaction} />
@@ -183,7 +205,6 @@ function App() {
           </div>
         </div>
 
-        {/* Premium Features Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div className="animate-fadeIn">
             <RecurringManager 
@@ -202,14 +223,11 @@ function App() {
           </div>
         </div>
 
-        {/* Transactions and Export */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="lg:col-span-2 animate-fadeIn">
             <TransactionList 
               transactions={filteredTransactions} 
-              onDeleteTransaction={deleteTransaction}
-              typeFilter={typeFilter}
-              onClearFilter={() => setTypeFilter('all')}
+              onDeleteTransaction={deleteTransaction} 
             />
           </div>
           <div className="animate-fadeIn">
@@ -217,7 +235,6 @@ function App() {
           </div>
         </div>
 
-        {/* Footer */}
         <div className="text-center text-gray-500 text-sm mt-12">
           <p>Built with ❤️ • Dark Mode Premium Edition</p>
         </div>
