@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CashClarity - Simple Budgeting. Crystal Clear Insights.</title>
+    <meta name="description" content="Free budget tracker that helps you understand your spending in seconds. No signup required. Your data stays private.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0f172a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 0;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            color: white;
+            padding: 1rem 3rem;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(6, 182, 212, 0.5);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+            background: #1e293b;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #06b6d4;
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #06b6d4;
+        }
+
+        .feature-card p {
+            color: #94a3b8;
+            line-height: 1.7;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 5rem 0;
+        }
+
+        .pricing h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 1rem;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card.featured {
+            border-color: #06b6d4;
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(6, 182, 212, 0.3);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-5px) scale(1.08);
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-price span {
+            font-size: 1.25rem;
+            color: #94a3b8;
+        }
+
+        .plan-description {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: 0.5rem 0;
+            color: #94a3b8;
+        }
+
+        .plan-features li:before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 0.75rem;
+        }
+
+        .plan-button {
+            display: inline-block;
+            width: 100%;
+            padding: 0.875rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .plan-button.primary {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            color: white;
+        }
+
+        .plan-button.secondary {
+            background: transparent;
+            border: 2px solid #334155;
+            color: #94a3b8;
+        }
+
+        .plan-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .plan-button.primary:hover {
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
+        }
+
+        .plan-button.secondary:hover {
+            border-color: #06b6d4;
+            color: #06b6d4;
+        }
+
+        /* Screenshot Section */
+        .screenshot {
+            padding: 5rem 0;
+            background: #1e293b;
+            text-align: center;
+        }
+
+        .screenshot h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+        }
+
+        .screenshot-img {
+            max-width: 100%;
+            border-radius: 1rem;
+            border: 2px solid #334155;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid #1e293b;
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.125rem;
+            }
+
+            .features h2,
+            .pricing h2,
+            .screenshot h2 {
+                font-size: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .pricing-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <svg class="logo-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <rect x="12" y="24" width="10" height="36" rx="2" fill="url(#barGradient)" filter="url(#glow)"/>
+                    <rect x="27" y="9" width="10" height="51" rx="2" fill="url(#barGradient)" filter="url(#glow)"/>
+                    <rect x="42" y="38" width="10" height="22" rx="2" fill="url(#barGradient)" filter="url(#glow)"/>
+                    <rect x="57" y="4" width="10" height="56" rx="2" fill="url(#barGradient)" filter="url(#glow)"/>
+                </svg>
+                <span class="logo-text">CashClarity</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>
+                Simple budgeting.<br>
+                <span class="gradient-text">Crystal clear insights.</span>
+            </h1>
+            <p>
+                Track your spending, understand your habits, and take control of your finances. 
+                No signup required. Start in 30 seconds.
+            </p>
+            <a href="https://dttigers.com" class="cta-button">Get Started Free</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>Everything you need to <span class="gradient-text">budget smarter</span></h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Setup</h3>
+                    <p>No account needed. No lengthy forms. Just open the app and start tracking. Your data stays private in your browser.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Smart Categories</h3>
+                    <p>Automatically organize spending by category. See exactly where your money goes with beautiful charts and insights.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Your Data, Your Device</h3>
+                    <p>Everything stays private on your device. No servers, no tracking, no data mining. Complete privacy guaranteed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <h2>Simple, <span class="gradient-text">transparent pricing</span></h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="plan-name">Free</div>
+                    <div class="plan-price">$0<span>/forever</span></div>
+                    <p class="plan-description">Perfect for getting started</p>
+                    <ul class="plan-features">
+                        <li>Unlimited transactions</li>
+                        <li>Category tracking</li>
+                        <li>Budget limits & alerts</li>
+                        <li>Export to CSV</li>
+                        <li>Local storage only</li>
+                    </ul>
+                    <a href="https://getcashclarity.com" class="plan-button secondary">Start Free</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="plan-name">Premium</div>
+                    <div class="plan-price">$4.99<span>/month</span></div>
+                    <p class="plan-description">For serious budgeters</p>
+                    <ul class="plan-features">
+                        <li>Everything in Free</li>
+                        <li>Cloud sync across devices</li>
+                        <li>Unlimited history</li>
+                        <li>Advanced analytics</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="https://getcashclarity.com" class="plan-button primary">Coming Soon</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshot Section -->
+    <section class="screenshot">
+        <div class="container">
+            <h2>See it in <span class="gradient-text">action</span></h2>
+            <img src="budget-tracker.png" alt="CashClarity App Screenshot" class="screenshot-img" 
+                 onerror="this.style.display='none'">
+            <div style="padding: 4rem; background: #0f172a; border-radius: 1rem; border: 2px solid #334155; max-width: 800px; margin: 0 auto;">
+                <p style="color: #94a3b8; font-size: 1.125rem;">
+                    📸 Screenshot coming soon! The app is live and ready to use at 
+                    <a href="https://getcashclarity.com" style="color: #06b6d4; text-decoration: none;">getcashclarity.com</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 CashClarity. Made with ❤️ by Morrill Holdings.</p>
+            <p style="margin-top: 0.5rem;">Your data stays on your device. Always.</p>
+        </div>
+    </footer>
+</body>
+</html>
