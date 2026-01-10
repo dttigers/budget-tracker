@@ -297,7 +297,7 @@
             color: #64748b;
         }
 
-        /* Modal Styles - IMPORTANT: Hidden by default */
+        /* Modal Styles */
         .modal-overlay {
             display: none !important;
             position: fixed;
@@ -395,6 +395,11 @@
             box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
         }
 
+        .modal-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .success-message {
             display: none;
             background: #10b981;
@@ -406,6 +411,20 @@
         }
 
         .success-message.active {
+            display: block;
+        }
+
+        .error-message {
+            display: none;
+            background: #ef4444;
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .error-message.active {
             display: block;
         }
 
@@ -577,11 +596,15 @@
                     placeholder="Your email address" 
                     required
                 >
-                <button type="submit" class="modal-submit">Notify Me at Launch</button>
+                <button type="submit" id="submitBtn" class="modal-submit">Notify Me at Launch</button>
             </form>
 
             <div id="successMessage" class="success-message">
                 ✓ You're on the list! We'll email you when Premium launches.
+            </div>
+
+            <div id="errorMessage" class="error-message">
+                Oops! Something went wrong. Please try again.
             </div>
         </div>
     </div>
@@ -594,8 +617,10 @@
         function closeModal() {
             document.getElementById('modalOverlay').classList.remove('active');
             document.getElementById('successMessage').classList.remove('active');
+            document.getElementById('errorMessage').classList.remove('active');
             document.getElementById('waitlistForm').style.display = 'flex';
             document.getElementById('emailInput').value = '';
+            document.getElementById('submitBtn').disabled = false;
         }
 
         function closeModalOnOverlay(event) {
@@ -604,30 +629,54 @@
             }
         }
 
-        function handleSubmit(event) {
+        async function handleSubmit(event) {
             event.preventDefault();
             
             const email = document.getElementById('emailInput').value;
+            const submitBtn = document.getElementById('submitBtn');
             
-            // Log to console (for now - you can connect to a backend later)
-            console.log('Waitlist signup:', email);
+            // Disable button while submitting
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
             
-            // Store in localStorage (simple tracking)
-            const waitlist = JSON.parse(localStorage.getItem('waitlist') || '[]');
-            waitlist.push({
-                email: email,
-                timestamp: new Date().toISOString()
-            });
-            localStorage.setItem('waitlist', JSON.stringify(waitlist));
-            
-            // Show success message
-            document.getElementById('waitlistForm').style.display = 'none';
-            document.getElementById('successMessage').classList.add('active');
-            
-            // Close modal after 3 seconds
-            setTimeout(() => {
-                closeModal();
-            }, 3000);
+            try {
+                // Send to Formspree
+                const response = await fetch('https://formspree.io/f/xvzzpdvg', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        _subject: 'New CashClarity Premium Waitlist Signup',
+                        source: 'Landing Page'
+                    })
+                });
+
+                if (response.ok) {
+                    // Success!
+                    document.getElementById('waitlistForm').style.display = 'none';
+                    document.getElementById('successMessage').classList.add('active');
+                    
+                    // Close modal after 3 seconds
+                    setTimeout(() => {
+                        closeModal();
+                    }, 3000);
+                } else {
+                    // Error
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('errorMessage').classList.add('active');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Notify Me at Launch';
+                
+                // Hide error after 3 seconds
+                setTimeout(() => {
+                    document.getElementById('errorMessage').classList.remove('active');
+                }, 3000);
+            }
         }
 
         // Close modal on ESC key
