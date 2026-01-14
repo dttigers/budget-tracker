@@ -26,6 +26,7 @@ function App() {
 
   const [dateFilter, setDateFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all'); // NEW: Filter by type
+  const [categoryFilter, setCategoryFilter] = useState('all'); // NEW: Filter by category
 
   useEffect(() => {
     localStorage.setItem('transactions', JSON.stringify(transactions));
@@ -137,8 +138,14 @@ function App() {
       if (typeFilter !== 'all') {
         passesTypeFilter = t.type === typeFilter;
       }
+
+      // Category filter
+      let passesCategoryFilter = true;
+      if (categoryFilter !== 'all') {
+        passesCategoryFilter = t.category === categoryFilter;
+      }
       
-      return passesDateFilter && passesTypeFilter;
+      return passesDateFilter && passesTypeFilter && passesCategoryFilter;
     });
   };
 
@@ -153,13 +160,21 @@ function App() {
     }
   };
 
+  // Get unique categories from transactions
+  const getCategories = () => {
+    const predefinedCategories = ['Transportation', 'Entertainment', 'Bills', 'Shopping', 'Healthcare'];
+    const transactionCategories = new Set(transactions.map(t => t.category));
+    const allCategories = new Set([...predefinedCategories, ...transactionCategories]);
+    return Array.from(allCategories).sort();
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
           <div className="flex items-center gap-3">
             <img src="/cashclarity-icon.svg" alt="CashClarity" className="h-10 w-10" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
              CashClarity
             </h1>
             <p className="text-gray-400 text-sm">Track smarter, spend better</p>
@@ -228,7 +243,10 @@ function App() {
           <div className="lg:col-span-2 animate-fadeIn">
             <TransactionList 
               transactions={filteredTransactions} 
-              onDeleteTransaction={deleteTransaction} 
+              onDeleteTransaction={deleteTransaction}
+              categories={getCategories()}
+              categoryFilter={categoryFilter}
+              onCategoryFilterChange={setCategoryFilter}
             />
           </div>
           <div className="animate-fadeIn">
